@@ -1,4 +1,4 @@
-
+-- Show round statistic on the table
 function Statistic()
 	World = cRoot:Get():GetDefaultWorld()
 	Line1 = (cChatColor.Red .."In Game")
@@ -8,51 +8,7 @@ function Statistic()
 	return true;
 end
 
-
-
---[[
-function BuildINIITEMS(Split, Player)
-	SettingsIni = cIniFile()
-	SettingsIni:ReadFile(PLUGIN:GetLocalFolder() .. "/Items.ini")
-	SettingsIni:Clear()
-	local split = StringSplit(AllItemsIDToChest, "\,");
-	ItemsNum = #split
-	for i = 1, 20 do
-		fromstring = ("ID"..i)
-		itemONE = math.random(ItemsNum)
-		itemTWO = math.random(ItemsNum)
-		itemTHREE = math.random(ItemsNum)
-		itemONERANDOM = math.random(2)
-		itemTWORANDOM = math.random(2)
-		itemTHREERANDOM = math.random(2)
-		ItemOneEnd=split[itemONE]
-		ItemTwoEnd=split[itemTWO]
-		ItemThreeEnd=split[itemTHREE]
-		ItemOneEndD=0
-		ItemTwoEndD=0
-		ItemThreeEndD=0
-		for j = 1, itemONERANDOM do
-			ItemOneEndD = (ItemOneEndD .. "," .. ItemOneEnd)
-		end
-		for k = 1, itemTWORANDOM do
-			ItemTwoEndD = (ItemTwoEndD .. "," .. ItemTwoEnd)
-		end
-		for l = 1, itemTHREERANDOM do
-			ItemThreeEndD = (ItemThreeEndD .. "," .. ItemThreeEnd)
-		end
-		ToChestString = (ItemOneEndD..","..ItemTwoEndD..","..ItemThreeEndD)
-		BlockedBlocks = SettingsIni:GetValueSet(fromstring, "Content", ToChestString)
-	end
-	Blocks = StringSplit(BlockedBlocks, ",")
-	SettingsIni:WriteFile()
-	return true;
-end;
-
---]]
-
-
-
-
+-- Load timers from Config.ini
 function LoadTimes()
 	Ini = cIniFile()
 	Ini:ReadFile(PLUGIN:GetLocalDirectory() .. "/Config.ini")
@@ -63,10 +19,7 @@ function LoadTimes()
 	return true;
 end
 
-
-
-
-
+-- Load spawn position
 function LoadSettings()
 	Ini = cIniFile()
 	Ini:ReadFile(PLUGIN:GetLocalDirectory() .. "/Config.ini")
@@ -76,8 +29,6 @@ function LoadSettings()
 	Ini:WriteFile()
 	return true;
 end
-
-
 
 
 
@@ -104,7 +55,7 @@ end;
 
 
 
-
+-- Restart round, then reset all the counters of time to return to the pre-spawn all, if the required number of players had accumulated (2), teleport all players on the map.
 function RestartRound(Split, Player)
 	PlayersTotal = 0
 	UnLoadItemsIntoBD()
@@ -125,12 +76,10 @@ function RestartRound(Split, Player)
 	if not(ThisisWin) then
 		cRoot:Get():BroadcastChat(cChatColor.LightGray .. "[".. cChatColor.Rose .. "HG".. cChatColor.LightGray .. "]".. cChatColor.Green .. " Round Restarted.")
 	end
-
 	if (JustLoad) then
 		Statistic()
 	end
 	JustLoad = true
-
 	ThisisWin = false
 	return true;
 end;
@@ -138,7 +87,7 @@ end;
 
 
 
-
+-- Start round ahead of time
 function startRound(Split, Player)
 	LoadTimes()
 	Time = 100;
@@ -192,7 +141,7 @@ end
 
 
 
--- ============== Editor mode (?) ==============--
+-- Editor mode 
 function EdtitorModeActivate(Split,Player)
 	if (#Split < 2) then
 		Player:SendMessage(cChatColor.Red .. 'Error')
@@ -208,12 +157,11 @@ function EdtitorModeActivate(Split,Player)
 	end
 	return true
 end
--- ============== End of Editor mode ==============--
 
 
 
 
-
+-- At the end of the round looking for the winner.
 function WinnerScaner()
 	if (PlayersTotal <= 1) then
 		Server = cRoot:Get()
@@ -240,7 +188,7 @@ end;
 
 
 
--- ============== If the chest was used, remove it from INI file (?) ==============--
+-- If the chest was used, remove it from INI file
 function UnLoadChestContent(Split,Player)
 	Ini = cIniFile()
 	Ini:ReadFile(PLUGIN:GetLocalFolder() .. "/Chests.ini")
@@ -248,13 +196,12 @@ function UnLoadChestContent(Split,Player)
 	Ini:DeleteValue(fromstring, "Content")
 	Ini:WriteFile()
 end
--- ===================================== End of chest removal ====================================--
 
 
 
 
 
--- ============== If the chest was opened, load its contents (?) ==============--
+-- If the chest was opened, load its contents
 function LoadChestContent(Split, Player)
 	Ini = cIniFile()
 	Ini:ReadFile(PLUGIN:GetLocalFolder() .. "/Chests.ini")
@@ -266,13 +213,12 @@ function LoadChestContent(Split, Player)
 	Blocks = StringSplit(Content, ",")
 	Ini:WriteFile()
 end
--- ===================================== End of chest loading ====================================--
 
 
 
 
 
--- ============== Remove and Load the content of the chests in INI file (?) ==============--
+-- Remove the content of the chests in INI file
 function UnLoadItemsIntoBD(Split, Player)
 	SettingsIni = cIniFile()
 	SettingsIni:ReadFile(PLUGIN:GetLocalFolder() .. "/Chests.ini")
@@ -284,7 +230,7 @@ end;
 
 
 
-
+-- Generate new INI file with content in the chest
 function LoadItemsIntoBD(Split, Player)
 	SettingsIni = cIniFile()
 	SettingsIni:ReadFile(PLUGIN:GetLocalFolder() .. "/Chests.ini")
@@ -301,33 +247,6 @@ function LoadItemsIntoBD(Split, Player)
 	SettingsIni:WriteFile()
 	return true;
 end;
--- ===================================== End of chest contents removal / loading ====================================--
-
-
-
-
-
---[[
-function pl(Split, Player)
-	SettingsIni = cIniFile( PLUGIN:GetLocalDirectory() .. "/PlayersInGame.ini" )
-	SettingsIni:ReadFile()
-	SettingsIni:Clear()
-	local ScanPlayer = function(OtherPlayer)
-		MyID = OtherPlayer:GetUniqueID()
-		for i = 0, PlayersTotal do
-			if (PlayerId[i] == MyID) then
-				PlayerName=OtherPlayer:GetName()
-				PlayerNameIG[i]=PlayerName
-				BlockedBlocks = SettingsIni:GetValueSet(i, "Nickname", PlayerName )
-			end
-		end
-	end
-	cRoot:Get():ForEachPlayer(ScanPlayer)
-	SettingsIni:WriteFile()
-	return true;
-end;
---]]
-
 
 
 
@@ -346,7 +265,7 @@ end;
 
 
 
-
+-- Teleport player to spawn point
 function LoadSpawnCoords(Split, Player)
 	local loopPlayers = function(Player)
 		GetUniqueID(Split, Player)
@@ -384,16 +303,13 @@ end
 
 
 --============================================================================================
---============================================================================================
---============================================================================================
+--===========================              SQLITE               ==============================
+--======================================   HELL   ============================================
 --============================================================================================
 
 
 
 function BlocksPlaced()
-	LOG("Testing SQLite bindings...");
-
-	-- Debug SQLite binding
 	local TestDB, ErrCode, ErrMsg = sqlite3.open("hunger.sqlite");
 	if (TestDB ~= nil) then
 		local function ShowRow(UserData, NumCols, Values, Names)
@@ -416,8 +332,6 @@ function BlocksPlaced()
 		-- This happens if for example SQLite cannot open the file (eg. a folder with the same name exists)
 		LOG("SQLite3 failed to open DB! (" .. ErrCode .. ", " .. ErrMsg ..")");
 	end
-
-	LOG("SQLite bindings test ended");
 end
 
 
@@ -425,9 +339,6 @@ end
 
 
 function BlocksBroken()
-	LOG("Testing SQLite bindings...");
-	
-	-- Debug SQLite binding
 	local TestDB, ErrCode, ErrMsg = sqlite3.open("hunger.sqlite");
 	if (TestDB ~= nil) then
 		local function ShowRow(UserData, NumCols, Values, Names)
@@ -450,17 +361,12 @@ function BlocksBroken()
 		-- This happens if for example SQLite cannot open the file (eg. a folder with the same name exists)
 		LOG("SQLite3 failed to open DB! (" .. ErrCode .. ", " .. ErrMsg ..")");
 	end
-	
-	LOG("SQLite bindings test ended");
 end
 
 
 
-
+-- Create a table that stores the position of the chests, which will loot. The chests, which is not present in this table, the loot will not appear.
 function ChestData()
-	LOG("Testing SQLite bindings...");
-	
-	-- Debug SQLite binding
 	local TestDB, ErrCode, ErrMsg = sqlite3.open("hunger.sqlite");
 	if (TestDB ~= nil) then
 		local function ShowRow(UserData, NumCols, Values, Names)
@@ -483,13 +389,11 @@ function ChestData()
 		-- This happens if for example SQLite cannot open the file (eg. a folder with the same name exists)
 		LOG("SQLite3 failed to open DB! (" .. ErrCode .. ", " .. ErrMsg ..")");
 	end
-	
-	LOG("SQLite bindings test ended");
 end
 
 
 
-
+-- Restoring broken blocks
 function reviveblockstwo(Split, Player)
 	World = cRoot:Get():GetDefaultWorld()
 	WorldName = World:GetName()
@@ -534,7 +438,7 @@ end;
 
 
 
-
+-- Restoring placed blocks
 function reviveblocks(Split, Player)
 	PlayerName = Player:GetName()
 	World = Player:GetWorld()
