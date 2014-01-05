@@ -1,5 +1,4 @@
-
-
+-- Check function of simultaneous connections
 function OnHandshake(ClientHandle, UserName)	
 	local loopPlayers = function(Player)
 		if (Player:GetName() == UserName) then
@@ -17,7 +16,7 @@ end
 
 
 
-
+-- Countdown to the end of the round
 function OnTick()
 	if (CanMoving) then
 		if (BeforeTime) then
@@ -65,8 +64,7 @@ end
 
 
 
-
-
+-- Waiting for players if the right amount collected, spawn on the map, if not, again waiting for players.
 function OnWorldTickTwo(World, TimeDelta)
 	TimeBefore = TimeBefore - 1
 	if (TimeBefore == 3500) then
@@ -101,7 +99,7 @@ end
 
 
 
-
+-- When players were collected spawn map and reckon 1 minute before the game.
 function OnWorldTick(World, TimeDelta)
 	if (BeforeTime) then
 		if not(CanMoving) then
@@ -177,7 +175,7 @@ end
 
 
 
-
+-- Do damage more democratic and randomly :)
 function OnTakeDamage(Receiver, TDI)
 	if CanMoving == false then
 			return true
@@ -201,7 +199,7 @@ end
 
 
 
-
+-- If a player goes out, kick him out of round
 function OnDisconnect(Player, Reason)
 	if (BeforeTime) then
 		MyID = Player:GetUniqueID()
@@ -221,7 +219,7 @@ end;
 
 
 
-
+-- If we went to the server, clean equipment
 function OnPlayerSpawned(Player)
 	World = Player:GetWorld()
 	Player:GetName()
@@ -233,8 +231,7 @@ end;
 
 
 
-
-
+-- Beat after each murder lightning in a murder scene and write in chat how many players left.
 function OnKilling(Victim, Killer)
 	MyID = Victim:GetUniqueID()
 	for i = 0, NumEntities do
@@ -256,7 +253,7 @@ end;
 
 
 
-
+-- If your block - chest show loot window, after changing the contents of the trunk, it is deleted from the database.
 function OnPlayerUsedBlock(Player, BlockX, BlockY, BlockZ, BlockFace, CursorX, CursorY, CursorZ, BlockType, BlockMeta)
 	chestx=0
 	if (BlockType == E_BLOCK_CHEST) then
@@ -310,7 +307,7 @@ end
 
 
 
-
+-- The default setting is enabled only blocks obsidian for developers. test function
 function OnPlayerPlacingBlock(Player, BlockX, BlockY, BlockZ, BlockFace, CursorX, CursorY, CursorZ, BlockType)
 	if (BlockType == E_BLOCK_obsidiand) then
 		sqlx =tonumber(BlockX)
@@ -338,7 +335,7 @@ end;
 
 
 
-
+-- Allowed to break only the foliage
 function OnPlayerLeftClick(Player, BlockX, BlockY, BlockZ, BlockFace, Status, BlockMeta)
 	World = Player:GetWorld()
 	BlockType = World:GetBlock(BlockX, BlockY, BlockZ)
@@ -370,8 +367,7 @@ end;
 
 
 
--- EDITOR
-
+-- EDITOR mode for chest. Use the command /em after this command only place chests to loot them appeared.
 function OnPlayerPlacedBlock(Player, BlockX, BlockY, BlockZ, BlockFace, CursorX, CursorY, CursorZ, BlockType, BlockMeta)
 	if (EdtitorMode) then
 		if (BlockType == E_BLOCK_CHEST) then
