@@ -15,7 +15,7 @@ function LoadTimes()
 	Time         = Ini:GetValueSetI("Times", "Time")
 	InternalTime = Ini:GetValueSetI("Times", "InternalTime")
 	TimeBefore   = Ini:GetValueSetI("Times", "TimeBefore")
-	Ini:WriteFile()
+	Ini:WriteFile("Config.ini")
 	return true;
 end
 
@@ -26,7 +26,7 @@ function LoadSettings()
 	SpawnPosX = Ini:GetValueSetI("Spawn", "X", 0)
 	SpawnPosY = Ini:GetValueSetI("Spawn", "Y", 64)
 	SpawnPosZ = Ini:GetValueSetI("Spawn", "Z", 0)
-	Ini:WriteFile()
+	Ini:WriteFile("Config.ini")
 	return true;
 end
 
@@ -194,7 +194,7 @@ function UnLoadChestContent(Split,Player)
 	Ini:ReadFile(PLUGIN:GetLocalFolder() .. "/Chests.ini")
 	fromstring = ("ID" .. ido)
 	Ini:DeleteValue(fromstring, "Content")
-	Ini:WriteFile()
+	Ini:WriteFile("Chests.ini")
 end
 
 
@@ -211,7 +211,7 @@ function LoadChestContent(Split, Player)
 		Content = 0
 	end
 	Blocks = StringSplit(Content, ",")
-	Ini:WriteFile()
+	Ini:WriteFile("Chests.ini")
 end
 
 
@@ -223,7 +223,7 @@ function UnLoadItemsIntoBD(Split, Player)
 	SettingsIni = cIniFile()
 	SettingsIni:ReadFile(PLUGIN:GetLocalFolder() .. "/Chests.ini")
 	SettingsIni:Clear()
-	SettingsIni:WriteFile()
+	SettingsIni:WriteFile("Chests.ini")
 	return true;
 end;
 
@@ -244,7 +244,7 @@ function LoadItemsIntoBD(Split, Player)
 		BlockedBlocks = SettingsIni:GetValueSet(fromstring, "Content", ToChestString)
 	end
 	Blocks = StringSplit(BlockedBlocks, ",")
-	SettingsIni:WriteFile()
+	SettingsIni:WriteFile("Chests.ini")
 	return true;
 end;
 
@@ -282,7 +282,7 @@ function LoadSpawnCoords(Split, Player)
 		spawncoordx = Ini:GetValue( fromstring, "x" )
 		spawncoordy = Ini:GetValue( fromstring, "y" )
 		spawncoordz = Ini:GetValue( fromstring, "z" )
-		Ini:WriteFile()
+		Ini:WriteFile("SpawnPos.ini")
 		Player:TeleportToCoords(tonumber(spawncoordx),tonumber(spawncoordy),tonumber(spawncoordz))
 		Player:GetName()
 		Inventory = Player:GetInventory()
