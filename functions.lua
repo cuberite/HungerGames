@@ -68,7 +68,6 @@ function RestartRound(Split, Player)
 		OtherPlayer:TeleportToCoords(SpawnPosX, SpawnPosY, SpawnPosZ)
 		LoadTimes()
 		reviveblockstwo()
-		BeforeTime = false
 		CanMoving = false;
 	end
 	cRoot:Get():ForEachPlayer(TPTOSPAWN)
@@ -79,6 +78,7 @@ function RestartRound(Split, Player)
 	if (JustLoad) then
 		Statistic()
 	end
+	BeforeTime = false
 	JustLoad = true
 	ThisisWin = false
 	return true;
@@ -163,23 +163,25 @@ end
 
 -- At the end of the round looking for the winner.
 function WinnerScaner()
-	if (PlayersTotal <= 1) then
-		Server = cRoot:Get()
-		local ScanPlayer = function(OtherPlayer)
-			MyID = OtherPlayer:GetUniqueID()
-			for i = 0, NumEntities do
-				if (PlayerId[i] == MyID) then
-					WinnerName = OtherPlayer:GetName()
-					break
+	if not(ThisisWin) then
+		if (PlayersTotal <= 1) then
+			Server = cRoot:Get()
+			local ScanPlayer = function(OtherPlayer)
+				MyID = OtherPlayer:GetUniqueID()
+				for i = 0, NumEntities do
+					if (PlayerId[i] == MyID) then
+						WinnerName = OtherPlayer:GetName()
+						break
+					end
 				end
 			end
+			cRoot:Get():ForEachPlayer(ScanPlayer)
+			Server:BroadcastChat(cChatColor.LightGray .. "[".. cChatColor.Rose .. "HG".. cChatColor.LightGray .. "]".. cChatColor.Yellow .. " Congratulations to the winner of the nickname ".. cChatColor.LightBlue .. WinnerName.."".. cChatColor.Yellow .. "!!!")
+			Server:BroadcastChat(cChatColor.LightGray .. "[".. cChatColor.Rose .. "HG".. cChatColor.LightGray .. "]".. cChatColor.Rose .. " Hunger Game Over!" )
+			LOG(" Congratulations to the winner of the nickname ".. WinnerName.." !!!")
+			ThisisWin = true
+			RestartRound()
 		end
-		cRoot:Get():ForEachPlayer(ScanPlayer)
-		Server:BroadcastChat(cChatColor.LightGray .. "[".. cChatColor.Rose .. "HG".. cChatColor.LightGray .. "]".. cChatColor.Yellow .. " Congratulations to the winner of the nickname ".. cChatColor.LightBlue .. WinnerName.."".. cChatColor.Yellow .. "!!!")
-		Server:BroadcastChat(cChatColor.LightGray .. "[".. cChatColor.Rose .. "HG".. cChatColor.LightGray .. "]".. cChatColor.Rose .. " Hunger Game Over!" )
-		LOG(" Congratulations to the winner of the nickname ".. WinnerName.." !!!")
-		ThisisWin = true
-		RestartRound()
 	end
 	return true;
 end;
