@@ -1,5 +1,8 @@
 -- Check function of simultaneous connections
-function OnHandshake(ClientHandle, UserName)	
+function OnHandshake(ClientHandle, UserName)
+	if (BeforeTime) then
+		ClientHandle:Kick("Wait until the game ends!")
+	end	
 	local loopPlayers = function(Player)
 		if (Player:GetName() == UserName) then
 			Player:SendMessage("Somebody just tried to login in under your name!")
@@ -21,37 +24,37 @@ function OnTick()
 	if (CanMoving) then
 		if (BeforeTime) then
 			InternalTime = InternalTime - 1
-			if InternalTime == 11990) then
+			if (InternalTime == 11990) then
 				cRoot:Get():BroadcastChat(cChatColor.LightGray .. "[".. cChatColor.Rose .. "HG".. cChatColor.LightGray .. "]".. cChatColor.Gold .. " 10 minutes before the end of the round.")
 			end
-			if InternalTime == 6000) then
+			if (InternalTime == 6000) then
 				cRoot:Get():BroadcastChat(cChatColor.LightGray .. "[".. cChatColor.Rose .. "HG".. cChatColor.LightGray .. "]".. cChatColor.Gold .. " 5 minutes before the end of the round.")
 			end
-			if InternalTime == 3600) then
+			if (InternalTime == 3600) then
 				cRoot:Get():BroadcastChat(cChatColor.LightGray .. "[".. cChatColor.Rose .. "HG".. cChatColor.LightGray .. "]".. cChatColor.Gold .. " 3 minutes before the end of the round.")
 			end
-			if InternalTime == 1200) then
+			if (InternalTime == 1200) then
 				cRoot:Get():BroadcastChat(cChatColor.LightGray .. "[".. cChatColor.Rose .. "HG".. cChatColor.LightGray .. "]".. cChatColor.Gold .. " 1 minutes before the end of the round..")
 			end
-			if InternalTime == 200) then
+			if (InternalTime == 200) then
 				cRoot:Get():BroadcastChat(cChatColor.LightGray .. "[".. cChatColor.Rose .. "HG".. cChatColor.LightGray .. "]".. cChatColor.Gold .. " 10 second before the end of the game.")
 			end
-			if InternalTime == 100) then
+			if (InternalTime == 100) then
 				cRoot:Get():BroadcastChat(cChatColor.LightGray .. "[".. cChatColor.Rose .. "HG".. cChatColor.LightGray .. "]".. cChatColor.Gold .. " 5 second before the end of the game.")
 			end
-			if InternalTime == 80) then
+			if (InternalTime == 80) then
 				cRoot:Get():BroadcastChat(cChatColor.LightGray .. "[".. cChatColor.Rose .. "HG".. cChatColor.LightGray .. "]".. cChatColor.Gold .. " 4 second before the end of the game.")
 			end
-			if InternalTime == 60) then
+			if (InternalTime == 60) then
 				cRoot:Get():BroadcastChat(cChatColor.LightGray .. "[".. cChatColor.Rose .. "HG".. cChatColor.LightGray .. "]".. cChatColor.Gold .. " 3 second before the end of the game")
 			end
-			if InternalTime == 40) then
+			if (InternalTime == 40) then
 				cRoot:Get():BroadcastChat(cChatColor.LightGray .. "[".. cChatColor.Rose .. "HG".. cChatColor.LightGray .. "]".. cChatColor.Gold .. " 2 second before the end of the game.")
 			end
-			if InternalTime == 20) then
+			if (InternalTime == 20) then
 				cRoot:Get():BroadcastChat(cChatColor.LightGray .. "[".. cChatColor.Rose .. "HG".. cChatColor.LightGray .. "]".. cChatColor.Gold .. " 1 second before the end of the game.")
 			end
-			if InternalTime == 0) then
+			if (InternalTime == 0) then
 				cRoot:Get():BroadcastChat(cChatColor.LightGray .. "[".. cChatColor.Rose .. "HG".. cChatColor.LightGray .. "]".. cChatColor.Red .. " Hunger Game Over!")
 				LOG("Hunger Game Over!")
 				ThisisWin = true
@@ -177,16 +180,16 @@ end
 
 -- Do damage more democratic and randomly :)
 function OnTakeDamage(Receiver, TDI)
-	if CanMoving == false then
+	if not(CanMoving) then
 			return true
 	end
 	
-	if BeforeTime == false then
+	if not(BeforeTime) then
 			return true
 	end
 	
 	
-		if BeforeTime == true then
+		if (BeforeTime) then
 		if TDI.FinalDamage <=1 then
 		
 		TDI.FinalDamage=TDI.FinalDamage*math.random(1, 2)
@@ -247,7 +250,11 @@ function OnKilling(Victim, Killer)
 			Statistic()
 		end
 	end
-	WinnerScaner()
+	if not(ThisisWin) then
+		WinnerScaner()
+		local ClientHandle = Victim:GetClientHandle()
+		ClientHandle:Kick("You are dead!")
+	end
 	return true;
 end;
 
