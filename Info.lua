@@ -90,6 +90,13 @@ g_PluginInfo =
 						},
 					},
 				},
+				
+				leave =
+				{
+					HelpString = "Leave an arena",
+					Permission = "hungergames.leave",
+					Handler = HandleLeaveCommand,
+				},
 			},
 		},
 	},

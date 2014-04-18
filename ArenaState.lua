@@ -228,6 +228,10 @@ function cArenaState(a_ArenaName, a_WorldName)
 			a_Player:TeleportToCoords(m_LobbyCoordinates.x, m_LobbyCoordinates.y, m_LobbyCoordinates.z)
 			m_Players[a_Player:GetName()] = nil
 			
+			if (not m_HasStarted) then
+				return
+			end
+			
 			if (self:GetNumPlayingPlayers()) then
 				local Winner = self:GetPlayingPlayers()
 				self:BroadcastChat(Winner[1] .. " Has won the game")
@@ -360,7 +364,7 @@ function cArenaState(a_ArenaName, a_WorldName)
 	
 	
 	-- Stops the arena
-	function self:StopArena()
+	function self:StopArena(a_ShouldShowMessage)
 		self:ForEachPlayer(
 			function(a_Player)
 				local PlayerName = a_Player:GetName()
@@ -378,6 +382,10 @@ function cArenaState(a_ArenaName, a_WorldName)
 				Inventory:AddItems(m_Inventories[PlayerName] or cItems(), true, true)
 			end
 		)
+		
+		if (a_ShouldShowMessage) then
+			self:BroadcastChat("The match is over.")
+		end
 		
 		-- Delete all the inventories wich were saved.
 		m_Inventories = {}

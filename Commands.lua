@@ -132,6 +132,30 @@ function HandleJoinCommand(a_Split, a_Player)
 	a_Player:SendMessage(cChatColor.LightGreen .. "You joined " .. ArenaName)
 	return true
 end
+
+
+
+
+
+function HandleLeaveCommand(a_Split, a_Player)
+	local PlayerState = GetPlayerState(a_Player:GetName())
+	if (not PlayerState:DidJoinArena()) then
+		a_Player:SendMessage(cChatColor.Rose .. "You didn't join an arena.")
+		return true
+	end
 	
+	local ArenaState = GetArenaState(PlayerState:GetJoinedArena())
+	if (not ArenaState) then
+		a_Player:SendMessage(cChatColor.Rose .. "The arena you were in doesn't exist anymore.")
+		return true
+	end
 	
+	PlayerState:LeaveArena()
+	ArenaState:RemovePlayer(a_Player)
 	
+	a_Player:SendMessage(cChatColor.LightGreen .. "You left the arena")
+	return true
+end
+	
+
+

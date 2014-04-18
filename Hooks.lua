@@ -37,6 +37,12 @@ function OnKilling(a_Victim, a_Killer)
 		return false
 	end
 	
+	
+	local InvContent = cItems()
+	Player:GetInventory():CopyToItems(InvContent)
+	
+	Player:GetWorld():SpawnItemPickups(InvContent, Player:GetPosX(), Player:GetPosY(), Player:GetPosZ(), 2)
+	
 	local ArenaState = GetArenaState(PlayerState:GetJoinedArena())
 	ArenaState:RemovePlayer(Player)
 	

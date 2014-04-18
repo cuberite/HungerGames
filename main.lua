@@ -31,7 +31,7 @@ end
 function OnDisable()
 	ForEachArena(
 		function(a_ArenaState)
-			a_ArenaState:StopArena()
+			a_ArenaState:StopArena(true)
 		end
 	)
 	
