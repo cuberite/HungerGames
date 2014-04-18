@@ -120,7 +120,12 @@ function HandleJoinCommand(a_Split, a_Player)
 	end
 	
 	local ArenaState = GetArenaState(ArenaName)
-
+	
+	if (ArenaState:GetNumSpawnPoints() <= 1) then
+		a_Player:SendMessage(cChatColor.Rose .. "The arena doesn't have enough spawnpoints. Please contact an admin.")
+		return true
+	end
+	
 	PlayerState:JoinArena(ArenaName)	
 	ArenaState:AddPlayer(a_Player)
 	

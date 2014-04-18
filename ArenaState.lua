@@ -225,11 +225,18 @@ function cArenaState(a_ArenaName, a_WorldName)
 	
 	
 	
-	-- Adds a spawnpoint.
-	function self:AddSpawnPoint(a_SpawnPoint)
-		assert((tolua.type(a_SpawnPoint) == "Vector3<double>") or (tolua.type(a_SpawnPoint) == "const Vector3<double>"))
+	do
+		-- Adds a spawnpoint.
+		function self:AddSpawnPoint(a_SpawnPoint)
+			assert((tolua.type(a_SpawnPoint) == "Vector3<double>") or (tolua.type(a_SpawnPoint) == "const Vector3<double>"))
+			
+			table.insert(m_SpawnPoints, {Coordinates = Vector3d(a_SpawnPoint), IsTaken = false})
+		end
 		
-		table.insert(m_SpawnPoints, {Coordinates = Vector3d(a_SpawnPoint), IsTaken = false})
+		-- Returns the amount of spawnpoints
+		function self:GetNumSpawnPoints()
+			return #m_SpawnPoints
+		end
 	end
 	
 	
@@ -290,7 +297,6 @@ function cArenaState(a_ArenaName, a_WorldName)
 	function self:StartArena()
 		self:RefillChestsInArena()
 		
-		local NumSpawnPoints = #m_SpawnPoints
 		local SpawnPoint = 1
 		self:ForEachPlayer(
 			function(a_Player)
