@@ -5,6 +5,9 @@ function RegisterHooks()
 	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_DESTROYED, OnPlayerDestroyed)
 	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_USING_BLOCK, OnPlayerUsingBlock)
 	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_BREAKING_BLOCK, OnPlayerBreakingBlock)
+	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_PLACING_BLOCK, OnPlayerPlacingBlock)
+	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_USING_ITEM, OnPlayerPlacingBlock)
+	
 end
 
 
@@ -100,6 +103,10 @@ function OnPlayerDestroyed(a_Player)
 	PlayerState:LeaveArena()
 	
 	local ArenaState = GetArenaState(PlayerState:GetJoinedArena())
+	if (not ArenaState) then
+		return false
+	end
+	
 	ArenaState:RemovePlayer(a_Player)
 end
 
@@ -125,3 +132,11 @@ end
 
 
 
+function OnPlayerPlacingBlock(a_Player, a_BlockX, a_BlockY, a_BlockZ)
+	local PlayerState = GetPlayerState(a_Player:GetName())
+	if (not PlayerState:DidJoinArena()) then
+		return false
+	end
+	
+	return true
+end
