@@ -7,7 +7,7 @@ function RegisterHooks()
 	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_BREAKING_BLOCK, OnPlayerBreakingBlock)
 	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_PLACING_BLOCK, OnPlayerPlacingBlock)
 	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_USING_ITEM, OnPlayerPlacingBlock)
-	
+	cPluginManager:AddHook(cPluginManager.HOOK_SPAWNING_MONSTER, OnSpawningMonster)
 end
 
 
@@ -140,3 +140,40 @@ function OnPlayerPlacingBlock(a_Player, a_BlockX, a_BlockY, a_BlockZ)
 	
 	return true
 end
+
+
+
+
+
+function OnSpawningMonster(a_World, a_Monster)
+	local Position = a_Monster:GetPosition()
+	local IsInsideArena = false
+	
+	ForEachArena(
+		function(a_ArenaState)
+			if (a_ArenaState:IsInside(Position)) then
+				IsInsideArena = true
+				return true
+			end
+		end
+	)
+	
+	if (not IsInsideArena) then
+		return false
+	end
+	
+	local MonsterFamily = a_Monster:GetMobFamily()
+	
+	if (MonsterFamily == cMonster.mfHostile) then
+		if (Config.PreventMonsterSpawn) then
+			return true
+		end
+	elseif (MonsterFamily == cMonster.mfPassive) then
+		if (Config.PreventAnimalSpawn) then
+			return true
+		end
+	end
+end
+
+
+

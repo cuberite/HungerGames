@@ -123,6 +123,12 @@ function cArenaState(a_ArenaName, a_WorldName)
 				return false, "Invalid point \"" .. a_Point .. "\""
 			end
 		end
+		
+		function self:IsInside(a_Point)
+			assert((tolua.type(a_Point) == "Vector3<double>") or (tolua.type(a_Point) == "const Vector3<double>"))
+			
+			return m_BoundingBox:IsInside(a_Point)
+		end
 	end
 	
 	
@@ -132,6 +138,15 @@ function cArenaState(a_ArenaName, a_WorldName)
 	-- Returns true if the arena has started
 	function self:HasStarted()
 		return m_HasStarted
+	end
+	
+	
+	
+	
+	
+	-- Returns the world where the arena is in
+	function self:GetWorldName()
+		return m_World
 	end
 	
 	
@@ -271,7 +286,9 @@ function cArenaState(a_ArenaName, a_WorldName)
 			local RandomItem = AvailableItems[math.random(1, #AvailableItems)]
 			local ItemChance = RandomItem.Chance
 			if (math.random(1, RandomItem.Chance) == 1) then
-				return cItem(RandomItem.ItemType, 1, RandomItem.ItemMeta)
+				local Item = cItem(RandomItem.ItemType, 1, RandomItem.ItemMeta)
+				Item.m_Enchantments:AddFromString(RandomItem.Enchantment or "")
+				return Item
 			else
 				return cItem()
 			end
