@@ -123,7 +123,7 @@ function OnPlayerLeftClick(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace, 
 		return false
 	end
 	
-	local BlockType, BlockMeta = a_Player:GetWorld():GetBlockTypeMeta(a_BlockX, a_BlockY, a_BlockZ)
+	local Succes, BlockType, BlockMeta = a_Player:GetWorld():GetBlockTypeMeta(a_BlockX, a_BlockY, a_BlockZ)
 	if ((BlockType ~= E_BLOCK_LEAVES) and (BlockType ~= E_BLOCK_TALL_GRASS)) then
 		return true
 	end
