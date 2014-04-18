@@ -4,7 +4,7 @@ function RegisterHooks()
 	cPluginManager:AddHook(cPluginManager.HOOK_TAKE_DAMAGE, OnTakeDamage)
 	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_DESTROYED, OnPlayerDestroyed)
 	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_USING_BLOCK, OnPlayerUsingBlock)
-	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_BREAKING_BLOCK, OnPlayerBreakingBlock)
+	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_LEFT_CLICK, OnPlayerLeftClick)
 	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_PLACING_BLOCK, OnPlayerPlacingBlock)
 	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_USING_ITEM, OnPlayerPlacingBlock)
 	cPluginManager:AddHook(cPluginManager.HOOK_SPAWNING_MONSTER, OnSpawningMonster)
@@ -100,13 +100,12 @@ function OnPlayerDestroyed(a_Player)
 		return false
 	end
 	
-	PlayerState:LeaveArena()
-	
 	local ArenaState = GetArenaState(PlayerState:GetJoinedArena())
 	if (not ArenaState) then
 		return false
 	end
 	
+	PlayerState:LeaveArena()
 	ArenaState:RemovePlayer(a_Player)
 end
 
@@ -114,18 +113,23 @@ end
 
 
 
-function OnPlayerBreakingBlock(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace, a_BlockType, a_BlockMeta)
+function OnPlayerLeftClick(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace, a_Action)
+	if ((a_Action ~= 0) and (a_Action ~= 1) and (a_Action ~= 2)) then
+		return false
+	end
+		
 	local PlayerState = GetPlayerState(a_Player:GetName())
 	if (not PlayerState:DidJoinArena()) then
 		return false
 	end
 	
-	if ((a_BlockType ~= E_BLOCK_LEAVES) and (a_BlockType ~= E_BLOCK_TALL_GRASS)) then
+	local BlockType, BlockMeta = a_Player:GetWorld():GetBlockTypeMeta(a_BlockX, a_BlockY, a_BlockZ)
+	if ((BlockType ~= E_BLOCK_LEAVES) and (BlockType ~= E_BLOCK_TALL_GRASS)) then
 		return true
 	end
 	
 	local ArenaState = GetArenaState(PlayerState:GetJoinedArena())
-	ArenaState:AddDestroyedBlock(Vector3i(a_BlockX, a_BlockY, a_BlockZ), a_BlockType, a_BlockMeta)
+	ArenaState:AddDestroyedBlock(Vector3i(a_BlockX, a_BlockY, a_BlockZ), BlockType, BlockMeta)
 end
 
 
