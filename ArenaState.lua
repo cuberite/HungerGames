@@ -1,4 +1,12 @@
 
+--[[
+ This file contains the ArenaState class.
+ The ArenaState manages everything that happens in an arena.
+]]
+
+
+
+
 local g_ArenaStates = {}
 
 
@@ -217,6 +225,7 @@ function cArenaState(a_ArenaName, a_WorldName)
 	
 	
 	
+	-- Adds a block to the table with destroyed blocks. They get replaced once the match is over.
 	function self:AddDestroyedBlock(a_Pos, a_BlockType, a_BlockMeta)
 		table.insert(m_DestroyedBlocks, {Pos = a_Pos, BlockType = a_BlockType, BlockMeta = a_BlockMeta})
 	end
@@ -293,8 +302,9 @@ function cArenaState(a_ArenaName, a_WorldName)
 	
 	
 	
-	-- Starts the arena
+	-- Starts the arena. 
 	function self:StartArena()
+		-- Refill all the chests inside the arena.
 		self:RefillChestsInArena()
 		
 		local SpawnPoint = 1
@@ -302,18 +312,22 @@ function cArenaState(a_ArenaName, a_WorldName)
 			function(a_Player)
 				local PlayerName = a_Player:GetName()
 				
+				-- Save the inventory
 				local InventoryContent = cItems()
 				local Inventory = a_Player:GetInventory()
 				Inventory:CopyToItems(InventoryContent)
 				m_Inventories[PlayerName] = InventoryContent
 				Inventory:Clear()
 				
+				-- Teleport the player to one of the spawnpoint coordinates.
 				local Coordinates = m_SpawnPoints[SpawnPoint].Coordinates
 				a_Player:TeleportToCoords(Coordinates.x, Coordinates.y, Coordinates.z)
 				
+				-- Mark the player as IsPlaying and save his spawnpoint coordinates.
 				m_Players[PlayerName].IsPlaying = true
 				m_Players[PlayerName].SpawnPoint = Coordinates
 				
+				-- Heal the player completely
 				a_Player:Heal(20)
 				a_Player:Feed(20, 20)
 				
@@ -334,27 +348,38 @@ function cArenaState(a_ArenaName, a_WorldName)
 			function(a_Player)
 				local PlayerName = a_Player:GetName()
 				
+				-- Mark the player as not playing and delete his spawnpoint coordinates
 				m_Players[PlayerName].IsPlaying = false
 				m_Players[PlayerName].SpawnPoint = nil
 				
+				-- Teleport the player to the lobby.
 				a_Player:TeleportToCoords(m_LobbyCoordinates.x, m_LobbyCoordinates.y, m_LobbyCoordinates.z)
 				
+				-- Give the player his items back.
 				local Inventory = a_Player:GetInventory()
 				Inventory:Clear()
 				Inventory:AddItems(m_Inventories[PlayerName] or cItems(), true, true)
 			end
 		)
 		
+		-- Delete all the inventories wich were saved.
 		m_Inventories = {}
+		
+		-- Reset the counters
 		m_CountDownLeft = Config.CountDownTime
-		m_HasStarted = false
+		m_NoDamageTimeLeft = Config.NoDamageTime
 		
+		-- Replace all the destroyed grass and leave blocks.
 		local World = cRoot:Get():GetWorld(m_World)
-		
 		for Idx, BlockInfo in ipairs(m_DestroyedBlocks) do
 			World:SetBlock(BlockInfo.Pos.x, BlockInfo.Pos.y, BlockInfo.Pos.z, BlockInfo.BlockType, BlockInfo.BlockMeta)
 		end
+		
+		-- Reset the table wich contains all the destroyed blocks.
 		m_DestroyedBlocks = {}
+		
+		-- Mark as "Not started"
+		m_HasStarted = false
 	end
 	
 	
@@ -403,6 +428,7 @@ function cArenaState(a_ArenaName, a_WorldName)
 	
 	
 	
+	
 	do
 		function self:GetCountDownTime()
 			return m_CountDownLeft
@@ -412,6 +438,8 @@ function cArenaState(a_ArenaName, a_WorldName)
 			return m_NoDamageTimeLeft
 		end
 	end
+	
+	
 	
 	
 	

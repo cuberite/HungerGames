@@ -1,4 +1,14 @@
 
+--[[
+ This file contains the PlayerState class.
+ The PlayerState contains all the information needed for the player. 
+ Currently this is only the selected and joined arena.
+]]
+
+
+
+
+
 local g_PlayerStates = {}
 
 
