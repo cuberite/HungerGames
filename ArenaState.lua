@@ -232,9 +232,7 @@ function cArenaState(a_ArenaName, a_WorldName)
 				return
 			end
 			
-			if (self:GetNumPlayingPlayers()) then
-				local Winner = self:GetPlayingPlayers()
-				self:BroadcastChat(Winner[1] .. " Has won the game")
+			if (self:GetNumPlayingPlayers() == 1) then
 				self:StopArena()
 			end
 		end
@@ -344,6 +342,9 @@ function cArenaState(a_ArenaName, a_WorldName)
 				local Coordinates = m_SpawnPoints[SpawnPoint].Coordinates
 				a_Player:TeleportToCoords(Coordinates.x, Coordinates.y, Coordinates.z)
 				
+				-- Set the gamemode to survival
+				a_Player:SetGameMode(eGameMode_Survival)
+				
 				-- Mark the player as IsPlaying and save his spawnpoint coordinates.
 				m_Players[PlayerName].IsPlaying = true
 				m_Players[PlayerName].SpawnPoint = Coordinates
@@ -364,17 +365,25 @@ function cArenaState(a_ArenaName, a_WorldName)
 	
 	
 	-- Stops the arena
-	function self:StopArena(a_ShouldShowMessage)
+	function self:StopArena(a_IsForceStop)
+		if (a_IsForceStop) then
+			self:BroadcastChat("The match is over.")
+		else
+			local Winner = self:GetPlayingPlayers()
+			self:BroadcastChat(Winner[1] .. " has won the game")
+		end
+		
 		self:ForEachPlayer(
 			function(a_Player)
 				local PlayerName = a_Player:GetName()
-				
-				-- Mark the player as not playing and delete his spawnpoint coordinates
-				m_Players[PlayerName].IsPlaying = false
-				m_Players[PlayerName].SpawnPoint = nil
+				local PlayerState = GetPlayerState(PlayerName)
 				
 				-- Teleport the player to the lobby.
 				a_Player:TeleportToCoords(m_LobbyCoordinates.x, m_LobbyCoordinates.y, m_LobbyCoordinates.z)
+				
+				-- Remove the player
+				self:RemovePlayer(a_Player)
+				PlayerState:LeaveArena()
 				
 				-- Give the player his items back.
 				local Inventory = a_Player:GetInventory()
@@ -382,10 +391,6 @@ function cArenaState(a_ArenaName, a_WorldName)
 				Inventory:AddItems(m_Inventories[PlayerName] or cItems(), true, true)
 			end
 		)
-		
-		if (a_ShouldShowMessage) then
-			self:BroadcastChat("The match is over.")
-		end
 		
 		-- Delete all the inventories wich were saved.
 		m_Inventories = {}
