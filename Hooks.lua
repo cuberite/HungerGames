@@ -204,6 +204,7 @@ function OnExecuteCommand(a_Player, a_CommandSplit)
 	
 	if (a_CommandSplit[1] ~= "/hg") then
 		a_Player:SendMessage(cChatColor.Rose .. "You can't use commands if you joined an HungerGames arena.")
+		a_Player:SendMessage(cChatColor.Rose .. "Use \"/hg leave\" first.")
 		return true
 	end
 end
