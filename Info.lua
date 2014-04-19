@@ -107,7 +107,7 @@ The players search for chests where they can find loot. They need it so for surv
 		},
 	},
 	
-	AditionalInfo =
+	AdditionalInfo =
 	{
 		{
 			Title = "Setting up an arena",
@@ -115,16 +115,16 @@ The players search for chests where they can find loot. They need it so for surv
 [[
 Assuming the server owner/admin already has a map.
 
-1) {%%b}Create the arena{%%/b}
-   To create an arena you use "/hg create [ArenaName]". 
+1) {%b}Create the arena{%/b}
+   To create an arena you use "/hg create [ArenaName]".
    The coordinates where you stand will be the coordinates for the lobby. When a player joins or dies in an arena he will be teleported there.
    
-2) Setting the bounding box
-   Then you need to set the bounding box of the arena. 
-   All the chests within this bounding box will be refilled once the arena starts so it is needed. You set it using "/hg bb (point|1,2)". 
+2) {%b}Setting the bounding box{%/b}
+   Then you need to set the bounding box of the arena.
+   All the chests within this bounding box will be refilled once the arena starts so it is needed. You set it using "/hg bb (point|1,2)".
    So basicly point 1 is on one side of the arena and point 2 on the opposite.
    
-3) Adding spawnpoints
+3) {%b}Adding spawnpoints{%/b}
    Then you have to add spawnpoints. You add them by using "/hg add"
    When an arena starts all the players will be sent to a different spawnpoint.
 ]],
@@ -144,14 +144,16 @@ I think the variables CountDownTime, NoDamageTime, PreventMonsterSpawn and Preve
   
 The hardest part is configuring the loot what a chest can have, but once you know it it's really easy.
 To add an item to the list of available loot you go to ChestContent and add this behind it: 
-{%%code}
+
+{%code}
 {
 	ItemType = ItemID,
 	ItemMeta = ItemMeta,
 	Chance = Chance,
 	Enchantment = "enchantmentname",
 },
-{%%/code}
+{%/code}
+
 ItemType: The itemid you want to have for example 267 for a diamond sword.
 ItemMeta: The meta you want to give the item.
 Enchantment: You don't have to put this in, but if you want an enchantment you simply give the name of the enchantment with an equal symbol and the level. For example: "sharpness=2" If you want multiple enchantments you use a ";" between the enchantments.
