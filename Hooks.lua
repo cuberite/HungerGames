@@ -8,6 +8,7 @@ function RegisterHooks()
 	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_PLACING_BLOCK, OnPlayerPlacingBlock)
 	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_USING_ITEM, OnPlayerPlacingBlock)
 	cPluginManager:AddHook(cPluginManager.HOOK_SPAWNING_MONSTER, OnSpawningMonster)
+	cPluginManager:AddHook(cPluginManager.HOOK_EXECUTE_COMMAND, OnExecuteCommand)
 end
 
 
@@ -21,6 +22,7 @@ function OnTick(a_TimeDelta)
 		end
 	)
 end
+
 
 
 
@@ -45,6 +47,7 @@ function OnKilling(a_Victim, a_Killer)
 	
 	local ArenaState = GetArenaState(PlayerState:GetJoinedArena())
 	ArenaState:RemovePlayer(Player)
+	PlayerState:LeaveArena()
 	
 	Player:SetHealth(20)
 	return true
@@ -187,3 +190,20 @@ end
 
 
 
+
+
+function OnExecuteCommand(a_Player, a_CommandSplit)
+	if (not a_Player) then
+		return false
+	end
+	
+	local PlayerState = GetPlayerState(a_Player:GetName())
+	if (not PlayerState:DidJoinArena()) then
+		return false
+	end
+	
+	if (a_CommandSplit[1] ~= "/hg") then
+		a_Player:SendMessage(cChatColor.Rose .. "You can't use commands if you joined an HungerGames arena.")
+		return true
+	end
+end
