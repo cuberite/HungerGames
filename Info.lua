@@ -10,6 +10,7 @@ g_PluginInfo =
 {
 	Name = "HungerGames",
 	Date = "2014-4-17",
+	SourceLocation = "https://github.com/mc-server/HungerGames",
 	Description = 
 [[
 A hunger games plugin for MCServer.
@@ -127,6 +128,8 @@ Assuming the server owner/admin already has a map.
 3) {%b}Adding spawnpoints{%/b}
    Then you have to add spawnpoints. You add them by using "/hg add"
    When an arena starts all the players will be sent to a different spawnpoint.
+   
+And there you have it. Your own HungerGames arena.
 ]],
 		},
 		
@@ -137,10 +140,10 @@ Assuming the server owner/admin already has a map.
 First open the "Config.cfg" file.
 
 I think the variables CountDownTime, NoDamageTime, PreventMonsterSpawn and PreventAnimalSpawn speak for themselves, but just to be sure:
-  CountDownTime: The time a player can't move and do anything when an arena starts.
-  NoDamageTime: The amount of time a player can't take any damage from another player
-  PreventMonsterSpawn: If set to true then monsters (zombies, skeletons creepers etc) can't spawn inside the bounding box of an arena.
-  PreventAnimalSpawn: Same as PreventMonsterSpawn but then for animals (pigs, cows, chicken etc).
+  {%b}CountDownTime:{%/b} The time a player can't move and do anything when an arena starts.
+  {%b}NoDamageTime:{%/b} The amount of time a player can't take any damage from another player
+  {%b}PreventMonsterSpawn:{%/b} If set to true then monsters (zombies, skeletons creepers etc) can't spawn inside the bounding box of an arena.
+  {%b}PreventAnimalSpawn:{%/b} Same as PreventMonsterSpawn but then for animals (pigs, cows, chicken etc).
   
 The hardest part is configuring the loot what a chest can have, but once you know it it's really easy.
 To add an item to the list of available loot you go to ChestContent and add this behind it: 
@@ -154,10 +157,10 @@ To add an item to the list of available loot you go to ChestContent and add this
 },
 {%/code}
 
-ItemType: The itemid you want to have for example 267 for a diamond sword.
-ItemMeta: The meta you want to give the item.
-Enchantment: You don't have to put this in, but if you want an enchantment you simply give the name of the enchantment with an equal symbol and the level. For example: "sharpness=2" If you want multiple enchantments you use a ";" between the enchantments.
-Chance: This is important. -- IF this item gets chosen then the server chooses a random number between 1 and the given number and if it's 1 this item gets put in the chest. The problem with this is the more items you have available the less chance this item gets chosen.
+{%b}ItemType:{%/b} The itemid you want to have for example 267 for a diamond sword.
+{%b}ItemMeta:{%/b} The meta you want to give the item.
+{%b}Enchantment:{%/b} You don't have to put this in, but if you want an enchantment you simply give the name of the enchantment with an equal symbol and the level. For example: "sharpness=2" If you want multiple enchantments you use a ";" between the enchantments.
+{%b}Chance:{%/b} This is important. -- IF this item gets chosen then the server chooses a random number between 1 and the given number and if it's 1 this item gets put in the chest. The problem with this is the more items you have available the less chance this item gets chosen.
 
 Also don't forget the comma. You have to place them at the exact spot as where they are in this example.
 ]]

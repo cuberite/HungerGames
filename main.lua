@@ -10,6 +10,8 @@ function Initialize(a_Plugin)
 	end
 	
 	ConfigLoader()
+	
+	ParseItems()
 		
 	LoadArenas()
 	
