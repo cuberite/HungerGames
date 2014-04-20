@@ -216,6 +216,10 @@ function cArenaState(a_ArenaName, a_WorldName)
 				SpawnPoint = nil,
 			}
 			
+			if (a_Player:GetWorld():GetName() ~= m_World) then
+				a_Player:MoveToWorld(m_World)
+			end
+			
 			a_Player:TeleportToCoords(m_LobbyCoordinates.x, m_LobbyCoordinates.y, m_LobbyCoordinates.z)
 			
 			if (self:GetNumPlayers() == #m_SpawnPoints) then
