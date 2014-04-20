@@ -153,6 +153,15 @@ function cArenaState(a_ArenaName, a_WorldName)
 	
 	
 	
+	-- Returns the name of the arena.
+	function self:GetName()
+		return m_ArenaName
+	end
+	
+	
+	
+	
+	
 	-- Returns the amount of players who joined.
 	function self:GetNumPlayers()
 		local Count = 0
@@ -588,6 +597,19 @@ function InsertArenaState(a_ArenaName, a_ArenaState)
 	return true
 end
 
+
+
+
+
+function DoWithArena(a_ArenaName, a_Callback)
+	assert(type(a_Callback) == 'function')
+	
+	if (not g_ArenaStates[a_ArenaName]) then
+		return false
+	end
+	
+	a_Callback(g_ArenaStates[a_ArenaName])
+end
 
 
 
