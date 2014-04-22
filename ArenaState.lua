@@ -512,7 +512,7 @@ function cArenaState(a_ArenaName, a_WorldName)
 		
 		a_IniFile:SetValue(m_ArenaName, "SpawnPoints", SpawnPoints)
 		a_IniFile:SetValue(m_ArenaName, "World", m_World)
-		a_IniFile:SetValue(m_ArenaName, "LobbyCoordinates", m_LobbyCoordinates.x .. "," .. m_LobbyCoordinates.y .. "," .. m_LobbyCoordinates.z)
+		a_IniFile:SetValue(m_ArenaName, "LobbyCoordinates", m_LobbyCoordinates.x .. "," .. m_LobbyCoordinates.y .. "," .. m_LobbyCoordinates.z .. "," .. m_LobbyWorld)
 		a_IniFile:SetValue(m_ArenaName, "BoundingBox", 
 			m_BoundingBox.p1.x .. "," ..
 			m_BoundingBox.p1.y .. "," ..
@@ -548,6 +548,7 @@ function cArenaState(a_ArenaName, a_WorldName)
 		local LobbyCoords = StringSplit(a_IniFile:GetValue(m_ArenaName, "LobbyCoordinates"), ",")
 		
 		self:SetLobbyCoordinates(Vector3d(LobbyCoords[1], LobbyCoords[2], LobbyCoords[3]))
+		self:SetLobbyWorld(LobbyCoords[4] or m_World)
 	end
 	
 	return self
