@@ -27,6 +27,7 @@ function cArenaState(a_ArenaName, a_WorldName)
 	local m_Inventories = {}
 	
 	local m_LobbyCoordinates = Vector3d()
+	local m_LobbyWorld = m_World
 	local m_BoundingBox = cCuboid()
 	
 	local m_DestroyedBlocks = {}
@@ -90,6 +91,18 @@ function cArenaState(a_ArenaName, a_WorldName)
 		-- Returns true if the lobby coordinates are set.
 		function self:AreLobbyCoordinateSet()
 			return (m_LobbyCoordinates:Length() ~= 0)
+		end
+		
+		-- sets the world where the lobby is.
+		function self:SetLobbyWorld(a_WorldName)
+			assert(type(a_WorldName) == 'string')
+			
+			m_LobbyWorld = a_WorldName
+		end
+		
+		-- Get the world where the lobby is.
+		function self:GetLobbyWorld()
+			return m_LobbyWorld
 		end
 	end
 	
@@ -238,6 +251,10 @@ function cArenaState(a_ArenaName, a_WorldName)
 		
 		-- Removes the player from the arena
 		function self:RemovePlayer(a_Player)
+			if (a_Player:GetWorld():GetName() ~= m_LobbyWorld) then
+				a_Player:MoveToWorld(m_LobbyWorld)
+			end
+			
 			a_Player:TeleportToCoords(m_LobbyCoordinates.x, m_LobbyCoordinates.y, m_LobbyCoordinates.z)
 			m_Players[a_Player:GetName()] = nil
 			

@@ -104,6 +104,13 @@ The players search for chests where they can find loot. They need it so for surv
 					Permission = "hungergames.leave",
 					Handler = HandleLeaveCommand,
 				},
+				
+				setlobby =
+				{
+					HelpString = "Set a new position for the lobby",
+					Permission = "hungergames.setlobby",
+					Handler = HandleSetLobbyCommand,
+				},
 			},
 		},
 	},

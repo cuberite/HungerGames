@@ -159,3 +159,28 @@ end
 	
 
 
+
+
+function HandleSetLobbyCommand(a_Split, a_Player)
+	local PlayerState = GetPlayerState(a_Player:GetName())
+	if (not PlayerState:HasArenaSelected()) then
+		a_Player:SendMessage(cChatColor.Rose .. "You didn't select an arena.")
+		return true
+	end
+	
+	local ArenaState = GetArenaState(PlayerState:GetSelectedArena())
+	if (not ArenaState) then
+		a_Player:SendMessage(cChatColor.Rose .. "The arena you had selected doesn't exist anymore.")
+		return true
+	end
+	
+	ArenaState:SetLobbyWorld(a_Player:GetWorld():GetName())
+	ArenaState:SetLobbyCoordinates(a_Player:GetPosition())
+	
+	a_Player:SendMessage(cChatColor.LightGreen .. "You changed the position of the lobby.")
+	return true
+end
+
+
+
+
