@@ -111,6 +111,13 @@ The players search for chests where they can find loot. They need it so for surv
 					Permission = "hungergames.setlobby",
 					Handler = HandleSetLobbyCommand,
 				},
+				
+				spectate =
+				{
+					HelpString = "Allows you to spectate an arena",
+					Permission = "hungergames.spectate",
+					Handler = HandleSpectateCommand,
+				},
 			},
 		},
 	},
