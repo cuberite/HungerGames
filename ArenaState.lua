@@ -205,6 +205,22 @@ function cArenaState(a_ArenaName, a_WorldName)
 	
 	
 	
+	-- Returns the amount of normal players (non-spectators)
+	function self:GetNumNormalPlayers()
+		local res = 0
+		for PlayerName, Info in pairs(m_Players) do
+			if (Info.IsSpectator) then
+				res = res + 1
+			end
+		end
+		
+		return res
+	end
+	
+	
+	
+	
+	
 	-- Returns the players who are still in the game
 	function self:GetPlayingPlayers()
 		local res = {}
@@ -221,9 +237,18 @@ function cArenaState(a_ArenaName, a_WorldName)
 	
 	
 	
+	-- Returns the info about the player.
+	function self:GetPlayerInfo(a_PlayerName)
+		return m_Players[a_PlayerName] or false
+	end
+	
+	
+	
+	
+	
 	do -- Manages the players joining and leaving.
 		-- Adds a player to the arena. Returns true if succes and returns false if: the arena is full or the arena already started.
-		function self:AddPlayer(a_Player)
+		function self:AddPlayer(a_Player, a_IsSpectator)
 			if (m_HasStarted) then
 				return false, "The arena already started."
 			end
@@ -235,6 +260,7 @@ function cArenaState(a_ArenaName, a_WorldName)
 			m_Players[a_Player:GetName()] = 
 			{
 				IsPlaying = false,
+				IsSpectator = a_IsSpectator or false,
 				SpawnPoint = nil,
 			}
 			
@@ -244,7 +270,7 @@ function cArenaState(a_ArenaName, a_WorldName)
 			
 			a_Player:TeleportToCoords(m_LobbyCoordinates.x, m_LobbyCoordinates.y, m_LobbyCoordinates.z)
 			
-			if (self:GetNumPlayers() == #m_SpawnPoints) then
+			if (self:GetNumNormalPlayers() == #m_SpawnPoints) then
 				self:StartArena()
 			end
 		end

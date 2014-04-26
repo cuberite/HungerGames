@@ -121,6 +121,11 @@ function HandleJoinCommand(a_Split, a_Player)
 	
 	local ArenaState = GetArenaState(ArenaName)
 	
+	if (ArenaState:HasStarted()) then
+		a_Player:SendMessage(cChatColor.Rose .. "The arena already started. Try again later.")
+		return true
+	end
+	
 	if (ArenaState:GetNumSpawnPoints() <= 1) then
 		a_Player:SendMessage(cChatColor.Rose .. "The arena doesn't have enough spawnpoints. Please contact an admin.")
 		return true
@@ -180,6 +185,44 @@ function HandleSetLobbyCommand(a_Split, a_Player)
 	a_Player:SendMessage(cChatColor.LightGreen .. "You changed the position of the lobby.")
 	return true
 end
+
+
+
+
+
+function HandleSpectateCommand(a_Split, a_Player)
+	if (not a_Split[3]) then
+		a_Player:SendMessage(cChatColor.Rose .. "Usage: /hg spectate [ArenaName]")
+		return true
+	end
+	
+	local PlayerState = GetPlayerState(a_Player:GetName())
+	if (PlayerState:DidJoinArena()) then
+		a_Player:SendMessage(cChatColor.Rose .. "You already joined an arena.")
+		return true
+	end
+	
+	local ArenaName = table.concat(a_Split, " ", 3)
+	
+	if (not ArenaExist(ArenaName)) then
+		a_Player:SendMessage(cChatColor.Rose .. "The arena \"" .. ArenaName .. "\" doesn't exist.")
+		return true
+	end
+	
+	local ArenaState = GetArenaState(ArenaName)
+	
+	if (not ArenaState:HasStarted()) then
+		a_Player:SendMessage(cChatColor.Rose .. "The arena hasn't started yet. Try again later.")
+		return true
+	end
+	
+	PlayerState:JoinArena(ArenaName)	
+	ArenaState:AddPlayer(a_Player, true)
+	
+	a_Player:SendMessage(cChatColor.LightGreen .. "You joined " .. ArenaName)
+	return true
+end
+	
 
 
 

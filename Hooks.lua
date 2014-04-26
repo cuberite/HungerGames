@@ -9,6 +9,7 @@ function RegisterHooks()
 	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_USING_ITEM, OnPlayerPlacingBlock)
 	cPluginManager:AddHook(cPluginManager.HOOK_SPAWNING_MONSTER, OnSpawningMonster)
 	cPluginManager:AddHook(cPluginManager.HOOK_EXECUTE_COMMAND, OnExecuteCommand)
+	cPluginManager:AddHook(cPluginManager.HOOK_PROJECTILE_HIT_ENTITY, OnProjectileHitEntity)
 end
 
 
@@ -69,6 +70,20 @@ function OnTakeDamage(a_Receiver, a_TDI)
 		return false
 	end
 	
+	if (a_TDI.Attacker ~= nil) then
+		if (a_TDI.Attacker:IsPlayer()) then
+			local Attacker = tolua.cast(a_TDI.Attacker, "cPlayer")
+			local AttackerState = GetPlayerState(Attacker)
+			if (AttackerState:HasJoinedArena()) then
+				local AttackerArena = GetArenaState(AttackerState:GetJoinedArena())
+				local PlayerInfo = AttackerArena:GetPlayerInfo(Attacker:GetName())
+				if (PlayerInfo.IsSpectator) then
+					return true
+				end
+			end
+		end
+	end
+	
 	local ArenaState = GetArenaState(PlayerState:GetJoinedArena())
 	if (ArenaState:GetNoDamageTime() == 0) then
 		return false
@@ -93,6 +108,11 @@ function OnPlayerUsingBlock(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace,
 	
 	local ArenaState = GetArenaState(PlayerState:GetJoinedArena())
 	if (ArenaState:GetCountDownTime() == 0) then
+		return false
+	end
+	
+	local PlayerInfo = ArenaState:GetPlayerInfo(a_Player:GetName())
+	if (not PlayerInfo.IsSpectator) then
 		return false
 	end
 	
@@ -134,6 +154,12 @@ function OnPlayerLeftClick(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace, 
 	
 	local Succes, BlockType, BlockMeta = a_Player:GetWorld():GetBlockTypeMeta(a_BlockX, a_BlockY, a_BlockZ)
 	if ((BlockType ~= E_BLOCK_LEAVES) and (BlockType ~= E_BLOCK_TALL_GRASS)) then
+		return true
+	end
+	
+	local PlayerInfo = ArenaState:GetPlayerInfo(a_Player:GetName())
+	
+	if (PlayerInfo.IsSpectator) then
 		return true
 	end
 	
@@ -207,4 +233,31 @@ function OnExecuteCommand(a_Player, a_CommandSplit)
 		a_Player:SendMessage(cChatColor.Rose .. "Use \"/hg leave\" first.")
 		return true
 	end
+end
+
+
+
+
+
+function OnProjectileHitEntity(a_ProjectileEntity, a_Entity)
+	if (not a_Entity:IsPlayer()) then
+		return false
+	end
+	
+	local Player = tolua.cast(a_Entity, "cPlayer")
+	
+	local PlayerState = GetPlayerState(Player:GetName())
+	
+	if (not PlayerState:HasJoinedArena()) then
+		return false
+	end
+	
+	local ArenaState = GetArenaState(PlayerState:GetJoinedArena())
+	if (not ArenaState) then
+		return false
+	end
+	
+	local PlayerInfo = ArenaState:GetPlayerInfo(Player:GetName())
+	
+	return PlayerInfo.IsSpectator
 end
