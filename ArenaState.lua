@@ -209,7 +209,7 @@ function cArenaState(a_ArenaName, a_WorldName)
 	function self:GetNumNormalPlayers()
 		local res = 0
 		for PlayerName, Info in pairs(m_Players) do
-			if (Info.IsSpectator) then
+			if (not Info.IsSpectator) then
 				res = res + 1
 			end
 		end
@@ -269,7 +269,7 @@ function cArenaState(a_ArenaName, a_WorldName)
 			end
 			
 			a_Player:TeleportToCoords(m_LobbyCoordinates.x, m_LobbyCoordinates.y, m_LobbyCoordinates.z)
-			
+
 			if (self:GetNumNormalPlayers() == #m_SpawnPoints) then
 				self:StartArena()
 			end
