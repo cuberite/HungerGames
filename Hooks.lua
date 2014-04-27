@@ -157,13 +157,14 @@ function OnPlayerLeftClick(a_Player, a_BlockX, a_BlockY, a_BlockZ, a_BlockFace, 
 		return true
 	end
 	
+	local ArenaState = GetArenaState(PlayerState:GetJoinedArena())
+	
 	local PlayerInfo = ArenaState:GetPlayerInfo(a_Player:GetName())
 	
 	if (PlayerInfo.IsSpectator) then
 		return true
 	end
 	
-	local ArenaState = GetArenaState(PlayerState:GetJoinedArena())
 	ArenaState:AddDestroyedBlock(Vector3i(a_BlockX, a_BlockY, a_BlockZ), BlockType, BlockMeta)
 end
 
