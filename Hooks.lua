@@ -73,8 +73,8 @@ function OnTakeDamage(a_Receiver, a_TDI)
 	if (a_TDI.Attacker ~= nil) then
 		if (a_TDI.Attacker:IsPlayer()) then
 			local Attacker = tolua.cast(a_TDI.Attacker, "cPlayer")
-			local AttackerState = GetPlayerState(Attacker)
-			if (AttackerState:HasJoinedArena()) then
+			local AttackerState = GetPlayerState(Attacker:GetName())
+			if (AttackerState:DidJoinArena()) then
 				local AttackerArena = GetArenaState(AttackerState:GetJoinedArena())
 				local PlayerInfo = AttackerArena:GetPlayerInfo(Attacker:GetName())
 				if (PlayerInfo.IsSpectator) then
