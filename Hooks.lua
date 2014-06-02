@@ -249,7 +249,7 @@ function OnProjectileHitEntity(a_ProjectileEntity, a_Entity)
 	
 	local PlayerState = GetPlayerState(Player:GetName())
 	
-	if (not PlayerState:HasJoinedArena()) then
+	if (not PlayerState:DidJoinArena()) then
 		return false
 	end
 	
