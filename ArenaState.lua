@@ -313,19 +313,6 @@ function cArenaState(a_ArenaName, a_WorldName)
 			end
 		end
 		
-		local function GetRandomItem()
-			local AvailableItems = Config.ChestContent
-			local RandomItem = AvailableItems[math.random(1, #AvailableItems)]
-			local ItemChance = RandomItem.Chance
-			if (math.random(1, RandomItem.Chance) == 1) then
-				local Item = cItem(RandomItem.ItemType, 1, RandomItem.ItemMeta)
-				Item.m_Enchantments:AddFromString(RandomItem.Enchantment or "")
-				return Item
-			else
-				return cItem()
-			end
-		end
-		
 		local World = cRoot:Get():GetWorld(m_World)
 		World:ChunkStay(ChunkCoords,
 			function(a_ChunkX, a_ChunkZ)
