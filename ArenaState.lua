@@ -32,6 +32,8 @@ function cArenaState(a_ArenaName, a_WorldName)
 	
 	local m_DestroyedBlocks = {}
 	
+	local m_TicksUntilStart = Config.ArenaStartCountdown
+	
 	
 	
 	
@@ -340,6 +342,10 @@ function cArenaState(a_ArenaName, a_WorldName)
 	
 	-- Starts the arena. 
 	function self:StartArena()
+		if (self:GetNumPlayers() < 2) then
+			return false;
+		end
+		
 		-- Refill all the chests inside the arena.
 		self:RefillChestsInArena()
 		
@@ -427,6 +433,9 @@ function cArenaState(a_ArenaName, a_WorldName)
 		
 		-- Mark as "Not started"
 		m_HasStarted = false
+		
+		-- Reset the countdown
+		m_TicksUntilStart = Config.ArenaStartCountdown
 	end
 	
 	
@@ -436,6 +445,13 @@ function cArenaState(a_ArenaName, a_WorldName)
 	-- Gets called each tick. It's used to teleport the players to their spawn point if the arena didn't start yet.
 	function self:Tick()
 		if (not m_HasStarted) then
+			m_TicksUntilStart = m_TicksUntilStart - 1
+			if (m_TicksUntilStart == 0) then
+				if (not self:StartArena()) then
+					m_TicksUntilStart = Config.ArenaStartCountdown
+				end
+			end
+			
 			return
 		end
 		
