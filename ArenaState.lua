@@ -411,7 +411,7 @@ function cArenaState(a_ArenaName, a_WorldName)
 				-- Give the player his items back.
 				local Inventory = a_Player:GetInventory()
 				Inventory:Clear()
-				Inventory:AddItems(m_Inventories[PlayerName] or cItems(), true, true)
+				Inventory:AddItems(m_Inventories[PlayerName] or cItems(), true)
 			end
 		)
 		
