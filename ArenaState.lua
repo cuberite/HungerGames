@@ -264,6 +264,11 @@ function cArenaState(a_ArenaName, a_WorldName)
 				return
 			end
 			
+			-- Give the player his items back.
+			local Inventory = a_Player:GetInventory()
+			Inventory:Clear()
+			Inventory:AddItems(m_Inventories[PlayerName] or cItems(), true)
+			
 			if (self:GetNumPlayingPlayers() == 1) then
 				self:StopArena()
 			end
@@ -407,11 +412,6 @@ function cArenaState(a_ArenaName, a_WorldName)
 				-- Remove the player
 				self:RemovePlayer(a_Player)
 				PlayerState:LeaveArena()
-				
-				-- Give the player his items back.
-				local Inventory = a_Player:GetInventory()
-				Inventory:Clear()
-				Inventory:AddItems(m_Inventories[PlayerName] or cItems(), true)
 			end
 		)
 		
