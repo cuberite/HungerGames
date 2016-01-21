@@ -13,7 +13,7 @@ g_PluginInfo =
 	SourceLocation = "https://github.com/mc-server/HungerGames",
 	Description = 
 [[
-A hunger games plugin for MCServer.
+A hunger games plugin for Cuberite.
 
 You are able to create multiple different arenas in different worlds. People can join those arenas and battle each other.
 The players search for chests where they can find loot. They need it so for survival. Eventualy only one player is left and he'll be the winner.
