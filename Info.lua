@@ -10,7 +10,7 @@ g_PluginInfo =
 {
 	Name = "HungerGames",
 	Date = "2014-4-17",
-	SourceLocation = "https://github.com/mc-server/HungerGames",
+	SourceLocation = "https://github.com/cuberite/HungerGames",
 	Description = 
 [[
 A hunger games plugin for Cuberite.
