@@ -4,7 +4,7 @@ function Initialize(a_Plugin)
 	
 	local ConfigLoader, errormsg = loadfile(a_Plugin:GetLocalFolder() .. "/Config.cfg")
 	if (not ConfigLoader) then
-		LOGERROR("Could not load HungerGames. There is an error in the config: \"", a_Plugin:GetLocalFolder() .. "/Config.cfg\"")
+		LOGERROR("Could not initialize. There is an error in the config: \"", a_Plugin:GetLocalFolder() .. "/Config.cfg\"")
 		LOGERROR(errormsg)
 		return false
 	end
@@ -22,7 +22,7 @@ function Initialize(a_Plugin)
 	
 	RegisterHooks()
 	
-	LOG("HungerGames has initialized")
+	LOG("Initialized!")
 	return true
 end
 
@@ -38,4 +38,5 @@ function OnDisable()
 	)
 	
 	SaveArenas()
+	LOG("Disabling...")
 end
